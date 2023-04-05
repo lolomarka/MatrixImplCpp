@@ -459,3 +459,38 @@ void TestInsertColumnWrongColumnSize()
     
     delete[] column;
 }
+
+void TestRemoveColumn()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t removeIndex = 5;
+    size_t insertColumnLength = 10;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    auto newColumnsCount = testMatrix.RemoveColumn(removeIndex);
+    assert(newColumnsCount == (cols - 1));
+}
+
+void TestRemoveColumnOutOfRange()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t removeIndex = 15;
+    size_t insertColumnLength = 10;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    try
+    {
+        testMatrix.RemoveColumn(removeIndex);
+        assert(false);
+    }
+    catch(const std::invalid_argument& e)
+    {
+        assert(true);
+    }
+}

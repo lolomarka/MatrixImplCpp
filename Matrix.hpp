@@ -177,7 +177,29 @@ inline size_t Matrix<T>::InsertColumn(size_t index, T *elements, size_t elements
 template <typename T>
 inline size_t Matrix<T>::RemoveColumn(size_t index)
 {
-    //TODO:
+    if (index < 0 || index > rowsCount)
+        std::__throw_invalid_argument("Index out of range.");
+    size_t newColsCount = colsCount - 1;
+    size_t oldLen = rowsCount * colsCount;
+    size_t newLen = rowsCount * newColsCount;
+    T* tmpData = new T[newLen];
+
+    for (size_t i = 0; i < rowsCount; i++)
+    {
+        for (size_t j = 0; j < index; j++)
+        {
+            tmpData[i * newColsCount + j] = data[i * colsCount + j];
+        }
+        for (size_t j = index + 1; j < colsCount; j++)
+        {
+            tmpData[i * newColsCount + j - 1] = data[i * colsCount + j];
+        }
+    }
+
+    delete[] data;
+    data = tmpData;
+    colsCount = newColsCount;
+
     return colsCount;
 }
 
