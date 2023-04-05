@@ -92,7 +92,6 @@ void TestResizeGrow()
     assert(correct);
 }
 
-
 void TestResizeReduce()
 {
     size_t rows = 5;
@@ -169,4 +168,79 @@ void TestResizeMixed()
     }
 
     assert(correct);
+}
+
+void TestInsertRowStart()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t insertPos = 0;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* row = new int[cols];
+
+    for (size_t i = 0; i < cols; i++)
+    {
+        row[i] = assertValue;
+    }
+    
+    testMatrix.InsertRow(insertPos, row);
+    delete[] row;
+    for (size_t i = 0; i < cols; i++)
+    {
+        assert(testMatrix(insertPos,i) == assertValue);
+    }
+}
+
+void TestInsertRowMiddle()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t insertPos = 1;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* row = new int[cols];
+
+    for (size_t i = 0; i < cols; i++)
+    {
+        row[i] = assertValue;
+    }
+    
+    testMatrix.InsertRow(insertPos, row);
+    delete[] row;
+    for (size_t i = 0; i < cols; i++)
+    {
+        assert(testMatrix(insertPos,i) == assertValue);
+    }
+}
+
+void TestInsertRowEnd()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t insertPos = 3;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* row = new int[cols];
+
+    for (size_t i = 0; i < cols; i++)
+    {
+        row[i] = assertValue;
+    }
+    
+    testMatrix.InsertRow(insertPos, row);
+    delete[] row;
+    for (size_t i = 0; i < cols; i++)
+    {
+        assert(testMatrix(insertPos,i) == assertValue);
+    }
 }
