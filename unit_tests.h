@@ -6,7 +6,7 @@ void TestMatrixConstructor()
     auto assertMatrix = Matrix<int>();
     auto test = Matrix<int>(0,0);
 
-    assert(assertMatrix.GetColumns() == test.GetColumns() && assertMatrix.GetRows() == test.GetRows());
+    assert(assertMatrix.GetColumnsCount() == test.GetColumnsCount() && assertMatrix.GetRowsCount() == test.GetRowsCount());
 }
 
 void TestMatrixOperatorWrongGetter()
@@ -50,5 +50,44 @@ void TestIterator()
         correct &= *it == int();
     }
     
+    assert(correct);
+}
+
+void TestResizeGrow()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t newRows = 5;
+    size_t newCols = 5;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            testMatrix(i,j) = assertValue;
+        }
+    }
+
+    testMatrix.Resize(newRows, newCols);
+
+    bool correct = true;
+    for (size_t i = 0; i < newRows; i++)
+    {
+        for (size_t j = 0; j < newCols; j++)
+        {
+            if(i < rows && j < cols)
+            {
+                correct = correct && (assertValue == testMatrix(i,j));
+            }
+            else
+            {
+                correct = correct && (testMatrix(i,j) == int());
+            }
+        }
+    }
+
     assert(correct);
 }
