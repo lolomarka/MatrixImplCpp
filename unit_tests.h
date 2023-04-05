@@ -174,24 +174,25 @@ void TestInsertRowStart()
 {
     size_t rows = 3;
     size_t cols = 3;
-    size_t insertPos = 0;
+    size_t insertIndex = 0;
+    size_t insertRowLength = 3;
     int assertValue = 666;
-
 
     auto testMatrix = Matrix<int>(rows,cols);
 
-    int* row = new int[cols];
+    int* row = new int[insertRowLength];
 
-    for (size_t i = 0; i < cols; i++)
+    for (size_t i = 0; i < insertRowLength; i++)
     {
         row[i] = assertValue;
     }
     
-    testMatrix.InsertRow(insertPos, row);
+    auto newRowsCount = testMatrix.InsertRow(insertIndex, row, insertRowLength);
+    assert(newRowsCount == (rows + 1));
     delete[] row;
     for (size_t i = 0; i < cols; i++)
     {
-        assert(testMatrix(insertPos,i) == assertValue);
+        assert(testMatrix(insertIndex,i) == assertValue);
     }
 }
 
@@ -199,24 +200,25 @@ void TestInsertRowMiddle()
 {
     size_t rows = 3;
     size_t cols = 3;
-    size_t insertPos = 1;
+    size_t insertIndex = 1;
+    size_t insertRowLength = 3;
     int assertValue = 666;
-
 
     auto testMatrix = Matrix<int>(rows,cols);
 
-    int* row = new int[cols];
+    int* row = new int[insertRowLength];
 
-    for (size_t i = 0; i < cols; i++)
+    for (size_t i = 0; i < insertRowLength; i++)
     {
         row[i] = assertValue;
     }
     
-    testMatrix.InsertRow(insertPos, row);
+    auto newRowsCount = testMatrix.InsertRow(insertIndex, row, insertRowLength);
+    assert(newRowsCount == (rows + 1));
     delete[] row;
     for (size_t i = 0; i < cols; i++)
     {
-        assert(testMatrix(insertPos,i) == assertValue);
+        assert(testMatrix(insertIndex,i) == assertValue);
     }
 }
 
@@ -224,23 +226,151 @@ void TestInsertRowEnd()
 {
     size_t rows = 3;
     size_t cols = 3;
-    size_t insertPos = 3;
+    size_t insertIndex = 3;
+    size_t insertRowLength = 3;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* row = new int[insertRowLength];
+
+    for (size_t i = 0; i < insertRowLength; i++)
+    {
+        row[i] = assertValue;
+    }
+    
+    auto newRowsCount = testMatrix.InsertRow(insertIndex, row, insertRowLength);
+    assert(newRowsCount == (rows + 1));
+    delete[] row;
+    for (size_t i = 0; i < cols; i++)
+    {
+        assert(testMatrix(insertIndex,i) == assertValue);
+    }
+}
+
+void TestInsertRowWrongIndex()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t insertIndex = 6;
+    size_t insertRowLength = 3;
     int assertValue = 666;
 
 
     auto testMatrix = Matrix<int>(rows,cols);
 
-    int* row = new int[cols];
+    int* row = new int[insertRowLength];
 
-    for (size_t i = 0; i < cols; i++)
+    for (size_t i = 0; i < insertRowLength; i++)
     {
         row[i] = assertValue;
     }
     
-    testMatrix.InsertRow(insertPos, row);
-    delete[] row;
-    for (size_t i = 0; i < cols; i++)
+    try
     {
-        assert(testMatrix(insertPos,i) == assertValue);
+        testMatrix.InsertRow(insertIndex, row, insertRowLength);
+        assert(false);
+    }
+    catch(const std::invalid_argument& e)
+    {
+        assert(true);
+    }
+    
+    delete[] row;
+}
+
+void TestInsertRowWrongRowSize()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t insertIndex = 0;
+    size_t insertRowLength = 5;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* row = new int[insertRowLength];
+
+    for (size_t i = 0; i < insertRowLength; i++)
+    {
+        row[i] = assertValue;
+    }
+    
+    try
+    {
+        testMatrix.InsertRow(insertIndex, row, insertRowLength);
+        assert(false);
+    }
+    catch(const std::length_error& e)
+    {
+        assert(true);
+    }
+    
+    delete[] row;
+}
+
+void TestRemoveRowStart()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t removeIndex = 0;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+    
+    auto newRowsCount = testMatrix.RemoveRow(removeIndex);
+    assert(newRowsCount == (rows - 1));
+}
+
+void TestRemoveRowMiddle()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t removeIndex = 1;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+    
+    auto newRowsCount = testMatrix.RemoveRow(removeIndex);
+    assert(newRowsCount == (rows - 1));
+}
+
+void TestRemoveRowEnd()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t removeIndex = 2;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+    
+    auto newRowsCount = testMatrix.RemoveRow(removeIndex);
+    assert(newRowsCount == (rows - 1));
+}
+
+void TestRemoveRowOutOfRange()
+{
+    size_t rows = 3;
+    size_t cols = 3;
+    size_t removeIndex = -1;
+    int assertValue = 666;
+
+
+    auto testMatrix = Matrix<int>(rows,cols);
+    try
+    {
+        testMatrix.RemoveRow(removeIndex);
+        assert(false);
+    }
+    catch(const std::invalid_argument& e)
+    {
+        assert(true);
     }
 }
+
+
+

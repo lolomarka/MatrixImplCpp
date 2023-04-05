@@ -27,9 +27,9 @@ public:
 
     void Print();
 
-    size_t InsertRow(size_t index, T* elements);
+    size_t InsertRow(size_t index, T* elements, size_t elementsLength);
     size_t RemoveRow(size_t index);
-    size_t InsertColumn(size_t index, T* elements);
+    size_t InsertColumn(size_t index, T* elements, size_t elementsLength);
     size_t RemoveColumn(size_t index);
     
     size_t GetRowsCount();
@@ -61,15 +61,6 @@ inline void Matrix<T>::Print(T *d, size_t r, size_t c)
 }
 
 template <typename T>
-inline size_t Matrix<T>::SizeOf(T *array)
-{
-    size_t size = sizeof(array);
-    if(size == 0)
-        return 0;
-    return (size/sizeof(array[0])) + 1;
-}
-
-template <typename T>
 inline T &Matrix<T>::operator()(size_t row, size_t col)
 {
     if (row < 0 || row >= rowsCount)
@@ -86,10 +77,9 @@ inline void Matrix<T>::Print()
 }
 
 template <typename T>
-inline size_t Matrix<T>::InsertRow(size_t index, T *elements)
+inline size_t Matrix<T>::InsertRow(size_t index, T *elements, size_t elementsLength)
 {
-    size_t elementsCount = SizeOf(elements); 
-    if (elementsCount != colsCount)
+    if (elementsLength != colsCount)
         std::__throw_length_error("Length of row not similar with matrix width.");
     if (index < 0 || index > rowsCount)
         std::__throw_invalid_argument("Index out of range.");
@@ -121,15 +111,38 @@ inline size_t Matrix<T>::InsertRow(size_t index, T *elements)
     return rowsCount;
 }
 
+
 template <typename T>
 inline size_t Matrix<T>::RemoveRow(size_t index)
 {
-    //TODO:
+    if (index < 0 || index > rowsCount)
+        std::__throw_invalid_argument("Index out of range.");
+    size_t oldLen = rowsCount * colsCount;
+    size_t newLen = (rowsCount - 1) * colsCount;
+    T* tmpData = new T[newLen];
+    size_t removeStartIndex = index * colsCount;
+    size_t removeEndIndex = removeStartIndex + colsCount;
+
+    for (size_t i = 0; i < removeStartIndex; i++)
+    {
+        tmpData[i] = data[i];
+    }
+
+    for (size_t i = removeEndIndex; i < oldLen; i++)
+    {
+        tmpData[removeStartIndex - removeEndIndex + i] = data[i];
+    }
+    
+    delete[] data;
+    data = tmpData;
+    rowsCount--;
+
+
     return rowsCount;
 }
 
 template <typename T>
-inline size_t Matrix<T>::InsertColumn(size_t index, T *elements)
+inline size_t Matrix<T>::InsertColumn(size_t index, T *elements, size_t elementsLength)
 {
     //TODO:
     return colsCount;
