@@ -372,5 +372,90 @@ void TestRemoveRowOutOfRange()
     }
 }
 
+void TestInsertColumn()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t insertIndex = 5;
+    size_t insertColumnLength = 10;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* column = new int[insertColumnLength];
+
+    for (size_t i = 0; i < insertColumnLength; i++)
+    {
+        column[i] = assertValue;
+    }
+    
+    auto newColumnsCount = testMatrix.InsertColumn(insertIndex, column, insertColumnLength);
+    delete[] column;
+    assert(newColumnsCount == (cols + 1));
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        assert(testMatrix(i, insertIndex) == assertValue);
+    }
+}
+
+void TestInsertColumnWrongIndex()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t insertIndex = 11;
+    size_t insertColumnLength = 10;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* column = new int[insertColumnLength];
+
+    for (size_t i = 0; i < insertColumnLength; i++)
+    {
+        column[i] = assertValue;
+    }
+    
+    try
+    {
+        testMatrix.InsertColumn(insertIndex, column, insertColumnLength);
+        assert(false);
+    }
+    catch(const std::invalid_argument& e)
+    {
+        assert(true);
+    }
+    
+    delete[] column;
+}
 
 
+void TestInsertColumnWrongColumnSize()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t insertIndex = 11;
+    size_t insertColumnLength = 5;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    int* column = new int[insertColumnLength];
+
+    for (size_t i = 0; i < insertColumnLength; i++)
+    {
+        column[i] = assertValue;
+    }
+    
+    try
+    {
+        testMatrix.InsertColumn(insertIndex, column, insertColumnLength);
+        assert(false);
+    }
+    catch(const std::length_error& e)
+    {
+        assert(true);
+    }
+    
+    delete[] column;
+}

@@ -144,7 +144,33 @@ inline size_t Matrix<T>::RemoveRow(size_t index)
 template <typename T>
 inline size_t Matrix<T>::InsertColumn(size_t index, T *elements, size_t elementsLength)
 {
-    //TODO:
+    if (elementsLength != rowsCount)
+        std::__throw_length_error("Length of column not similar with matrix width.");
+    if (index < 0 || index > rowsCount)
+        std::__throw_invalid_argument("Index out of range.");
+    size_t newColsCount = colsCount + 1;
+    size_t newLen = rowsCount * (newColsCount);
+
+    T* tmpData = new T[newLen];
+
+    for (size_t i = 0; i < rowsCount; i++)
+    {
+        for (size_t j = 0; j < index; j++)
+        {
+            tmpData[i * newColsCount + j] = data[i * colsCount + j];
+        }
+        auto value = elements[i];
+        tmpData[i * newColsCount + index] = value;
+        for (size_t j = index; j < colsCount; j++)
+        {
+            tmpData[i * newColsCount + j + 1] = data[i * colsCount + j];
+        }
+    }
+
+    delete[] data;
+    data = tmpData;
+    colsCount = newColsCount;    
+
     return colsCount;
 }
 
