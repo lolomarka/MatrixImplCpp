@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+#include <string.h>
 using namespace std;
 
 template <typename T>
@@ -10,7 +10,6 @@ private:
     size_t rowsCount;
     size_t colsCount;
     void Print(T* d, size_t r, size_t c);
-    size_t SizeOf(T* array);
 public:
     class iterator {
         public:
@@ -26,6 +25,8 @@ public:
     T& operator()(size_t row, size_t col);
 
     void Print();
+
+    void Swap(Matrix<T>& other);
 
     size_t InsertRow(size_t index, T* elements, size_t elementsLength);
     size_t RemoveRow(size_t index);
@@ -74,6 +75,15 @@ template <typename T>
 inline void Matrix<T>::Print()
 {
     Print(data, rowsCount, colsCount);
+}
+
+template <typename T>
+inline void Matrix<T>::Swap(Matrix<T>& other)
+{
+    if(colsCount != other.colsCount || rowsCount != other.rowsCount)
+        __throw_invalid_argument("Cannot swap elements of two matrices with not similar dimensions");
+
+    swap(data, other.data);
 }
 
 template <typename T>

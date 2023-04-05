@@ -494,3 +494,64 @@ void TestRemoveColumnOutOfRange()
         assert(true);
     }
 }
+
+void TestSwap()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+
+    int assertValue = 512;
+
+    auto testMatrixA = Matrix<int>(rows, cols);
+    auto testMatrixB = Matrix<int>(rows, cols);
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            testMatrixB(i,j) = assertValue;
+        }
+    }
+
+    testMatrixA.Swap(testMatrixB);    
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            assert(testMatrixA(i,j) == assertValue);
+            assert(testMatrixB(i,j) == int());
+        }
+    }
+}
+
+void TestSwapInvalidArgument()
+{
+    size_t rows = 10;
+    size_t cols = 10;
+    size_t rowsB = 20;
+    size_t colsB = 20;
+
+    int assertValue = 512;
+
+    auto testMatrixA = Matrix<int>(rows, cols);
+    auto testMatrixB = Matrix<int>(rowsB, colsB);
+
+    for (size_t i = 0; i < rowsB; i++)
+    {
+        for (size_t j = 0; j < colsB; j++)
+        {
+            testMatrixB(i,j) = assertValue;
+        }
+    }
+
+    try
+    {
+        testMatrixA.Swap(testMatrixB);    
+        assert(false);
+    }
+    catch(const std::invalid_argument& e)
+    {
+        assert(true);
+    }
+}
