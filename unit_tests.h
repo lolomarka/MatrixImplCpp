@@ -91,3 +91,82 @@ void TestResizeGrow()
 
     assert(correct);
 }
+
+
+void TestResizeReduce()
+{
+    size_t rows = 5;
+    size_t cols = 5;
+    size_t newRows = 3;
+    size_t newCols = 3;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            testMatrix(i,j) = assertValue;
+        }
+    }
+
+    testMatrix.Resize(newRows, newCols);
+
+    bool correct = true;
+    for (size_t i = 0; i < newRows; i++)
+    {
+        for (size_t j = 0; j < newCols; j++)
+        {
+            if(i < rows && j < cols)
+            {
+                correct = correct && (assertValue == testMatrix(i,j));
+            }
+            else
+            {
+                correct = correct && (testMatrix(i,j) == int());
+            }
+        }
+    }
+
+    assert(correct);
+}
+
+void TestResizeMixed()
+{
+    size_t rows = 1;
+    size_t cols = 10;
+    size_t newRows = 5;
+    size_t newCols = 5;
+    int assertValue = 666;
+
+    auto testMatrix = Matrix<int>(rows,cols);
+
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < cols; j++)
+        {
+            testMatrix(i,j) = assertValue;
+        }
+    }
+
+    testMatrix.Resize(newRows, newCols);
+
+    bool correct = true;
+    for (size_t i = 0; i < newRows; i++)
+    {
+        for (size_t j = 0; j < newCols; j++)
+        {
+            if(i < rows && j < cols)
+            {
+                correct = correct && (assertValue == testMatrix(i,j));
+            }
+            else
+            {
+                correct = correct && (testMatrix(i,j) == int());
+            }
+        }
+    }
+
+    assert(correct);
+}
