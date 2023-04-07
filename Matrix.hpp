@@ -6,33 +6,39 @@ template <typename T>
 class Matrix
 {
 private:
-    T* data;
+    T *data;
     size_t rowsCount;
     size_t colsCount;
-    void Print(T* d, size_t r, size_t c);
+    void Print(T *d, size_t r, size_t c);
+
 public:
-    class iterator {
-        public:
-            iterator(T* ptr) : m_ptr(ptr) {}
-            iterator operator++() { m_ptr++; return *this; }
-            T& operator*() {return *m_ptr; }
-            bool operator != (const iterator& other) const{ return m_ptr != other.m_ptr; }
-        
-        private:
-            T* m_ptr;
+    class iterator
+    {
+    public:
+        iterator(T *ptr) : m_ptr(ptr) {}
+        iterator operator++()
+        {
+            m_ptr++;
+            return *this;
+        }
+        T &operator*() { return *m_ptr; }
+        bool operator!=(const iterator &other) const { return m_ptr != other.m_ptr; }
+
+    private:
+        T *m_ptr;
     };
 
-    T& operator()(size_t row, size_t col);
+    T &operator()(size_t row, size_t col);
 
     void Print();
 
-    void Swap(Matrix<T>& other);
+    void Swap(Matrix<T> &other);
 
-    size_t InsertRow(size_t index, T* elements, size_t elementsLength);
+    size_t InsertRow(size_t index, T *elements, size_t elementsLength);
     size_t RemoveRow(size_t index);
-    size_t InsertColumn(size_t index, T* elements, size_t elementsLength);
+    size_t InsertColumn(size_t index, T *elements, size_t elementsLength);
     size_t RemoveColumn(size_t index);
-    
+
     size_t GetRowsCount() const;
     size_t GetColumnsCount() const;
 
@@ -53,7 +59,7 @@ inline void Matrix<T>::Print(T *d, size_t r, size_t c)
     {
         for (size_t j = 0; j < c; j++)
         {
-            auto element = d[i*c + j]; 
+            auto element = d[i * c + j];
             cout << element << "\t";
         }
         cout << endl;
@@ -78,7 +84,7 @@ inline void Matrix<T>::Print()
 }
 
 template <typename T>
-inline void Matrix<T>::Swap(Matrix<T>& other)
+inline void Matrix<T>::Swap(Matrix<T> &other)
 {
     swap(colsCount, other.colsCount);
     swap(rowsCount, other.rowsCount);
@@ -96,8 +102,8 @@ inline size_t Matrix<T>::InsertRow(size_t index, T *elements, size_t elementsLen
     size_t insertStartIndex = index * colsCount;
     size_t insertEndIndex = insertStartIndex + colsCount;
     size_t newLen = (rowsCount + 1) * colsCount;
-    T* tmpData = new T[newLen];
-    
+    T *tmpData = new T[newLen];
+
     for (size_t i = 0; i < insertStartIndex; i++)
     {
         tmpData[i] = data[i];
@@ -112,14 +118,13 @@ inline size_t Matrix<T>::InsertRow(size_t index, T *elements, size_t elementsLen
     {
         tmpData[i] = data[insertStartIndex - insertEndIndex + i];
     }
-    
+
     delete[] data;
     data = tmpData;
     rowsCount++;
 
     return rowsCount;
 }
-
 
 template <typename T>
 inline size_t Matrix<T>::RemoveRow(size_t index)
@@ -128,7 +133,7 @@ inline size_t Matrix<T>::RemoveRow(size_t index)
         std::__throw_invalid_argument("Index out of range.");
     size_t oldLen = rowsCount * colsCount;
     size_t newLen = (rowsCount - 1) * colsCount;
-    T* tmpData = new T[newLen];
+    T *tmpData = new T[newLen];
     size_t removeStartIndex = index * colsCount;
     size_t removeEndIndex = removeStartIndex + colsCount;
 
@@ -141,11 +146,10 @@ inline size_t Matrix<T>::RemoveRow(size_t index)
     {
         tmpData[removeStartIndex - removeEndIndex + i] = data[i];
     }
-    
+
     delete[] data;
     data = tmpData;
     rowsCount--;
-
 
     return rowsCount;
 }
@@ -160,7 +164,7 @@ inline size_t Matrix<T>::InsertColumn(size_t index, T *elements, size_t elements
     size_t newColsCount = colsCount + 1;
     size_t newLen = rowsCount * (newColsCount);
 
-    T* tmpData = new T[newLen];
+    T *tmpData = new T[newLen];
 
     for (size_t i = 0; i < rowsCount; i++)
     {
@@ -178,7 +182,7 @@ inline size_t Matrix<T>::InsertColumn(size_t index, T *elements, size_t elements
 
     delete[] data;
     data = tmpData;
-    colsCount = newColsCount;    
+    colsCount = newColsCount;
 
     return colsCount;
 }
@@ -191,7 +195,7 @@ inline size_t Matrix<T>::RemoveColumn(size_t index)
     size_t newColsCount = colsCount - 1;
     size_t oldLen = rowsCount * colsCount;
     size_t newLen = rowsCount * newColsCount;
-    T* tmpData = new T[newLen];
+    T *tmpData = new T[newLen];
 
     for (size_t i = 0; i < rowsCount; i++)
     {
@@ -213,7 +217,7 @@ inline size_t Matrix<T>::RemoveColumn(size_t index)
 }
 
 template <typename T>
-inline size_t Matrix<T>::GetRowsCount() const 
+inline size_t Matrix<T>::GetRowsCount() const
 {
     return rowsCount;
 }
@@ -229,18 +233,18 @@ inline void Matrix<T>::Resize(size_t rows, size_t cols)
 {
     if (rows == rowsCount && cols == colsCount)
         return;
-    T* newData = new T [rows*cols];
+    T *newData = new T[rows * cols];
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            if(i < rowsCount && j < colsCount)
+            if (i < rowsCount && j < colsCount)
             {
-                newData[i*cols + j] = operator()(i,j);
+                newData[i * cols + j] = operator()(i, j);
             }
             else
             {
-                newData[i*cols + j] = T();
+                newData[i * cols + j] = T();
             }
         }
     }
@@ -274,5 +278,3 @@ inline Matrix<T>::~Matrix()
 {
     delete[] data;
 }
-
-
