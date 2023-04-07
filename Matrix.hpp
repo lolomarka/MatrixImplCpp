@@ -33,8 +33,8 @@ public:
     size_t InsertColumn(size_t index, T* elements, size_t elementsLength);
     size_t RemoveColumn(size_t index);
     
-    size_t GetRowsCount();
-    size_t GetColumnsCount();
+    size_t GetRowsCount() const;
+    size_t GetColumnsCount() const;
 
     void Resize(size_t rows, size_t cols);
 
@@ -80,9 +80,8 @@ inline void Matrix<T>::Print()
 template <typename T>
 inline void Matrix<T>::Swap(Matrix<T>& other)
 {
-    if(colsCount != other.colsCount || rowsCount != other.rowsCount)
-        __throw_invalid_argument("Cannot swap elements of two matrices with not similar dimensions");
-
+    swap(colsCount, other.colsCount);
+    swap(rowsCount, other.rowsCount);
     swap(data, other.data);
 }
 
@@ -214,13 +213,13 @@ inline size_t Matrix<T>::RemoveColumn(size_t index)
 }
 
 template <typename T>
-inline size_t Matrix<T>::GetRowsCount()
+inline size_t Matrix<T>::GetRowsCount() const 
 {
     return rowsCount;
 }
 
 template <typename T>
-inline size_t Matrix<T>::GetColumnsCount()
+inline size_t Matrix<T>::GetColumnsCount() const
 {
     return colsCount;
 }
