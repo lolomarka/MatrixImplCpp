@@ -499,15 +499,17 @@ void TestSwap()
 {
     size_t rows = 10;
     size_t cols = 10;
+    size_t rowsB = 20;
+    size_t colsB = 20;
 
     int assertValue = 512;
 
     auto testMatrixA = Matrix<int>(rows, cols);
-    auto testMatrixB = Matrix<int>(rows, cols);
+    auto testMatrixB = Matrix<int>(rowsB, colsB);
 
-    for (size_t i = 0; i < rows; i++)
+    for (size_t i = 0; i < rowsB; i++)
     {
-        for (size_t j = 0; j < cols; j++)
+        for (size_t j = 0; j < colsB; j++)
         {
             testMatrixB(i,j) = assertValue;
         }
@@ -515,11 +517,17 @@ void TestSwap()
 
     testMatrixA.Swap(testMatrixB);    
 
+    for (size_t i = 0; i < rowsB; i++)
+    {
+        for (size_t j = 0; j < colsB; j++)
+        {
+            assert(testMatrixA(i,j) == assertValue);
+        }
+    }
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            assert(testMatrixA(i,j) == assertValue);
             assert(testMatrixB(i,j) == int());
         }
     }
